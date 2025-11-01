@@ -3,8 +3,14 @@
     <img :src="image" alt="Promotion images" />
     <div class="content">
       <h2>{{ title }}</h2>
-      <!-- <p>{{ description }}</p> -->
-      <ButtonComponent :text="buttonText" :color="buttonColor" />
+      
+      <ButtonComponent 
+        :text="buttonText" 
+        :color="buttonColor" 
+        @click="showMwssage"
+        
+        />
+      
     </div>
   </div>
 </template>
@@ -12,7 +18,7 @@
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
 
-defineProps({
+const props=defineProps({
   title: String,
   description: String,
   image: String,
@@ -20,6 +26,11 @@ defineProps({
   buttonText: String,
   buttonColor: String
 });
+
+function showMwssage() {
+  alert("Let's shop: "+props.title);
+}
+
 </script>
 
 <style scoped>

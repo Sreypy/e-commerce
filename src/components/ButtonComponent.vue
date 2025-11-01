@@ -1,14 +1,22 @@
 <template>
-  <button class="btn" :style="{ backgroundColor: color }">
+  <button class="btn" 
+    :style="{ backgroundColor: color }  
+    "@click="hendleClick">
     {{ text }}
   </button>
 </template>
 
 <script setup>
-defineProps({
+const props=defineProps({
   text: String,
   color: String
 });
+
+const emit = defineEmits(['click']);
+
+function hendleClick() {
+  emit('click');
+}
 </script>
 
 <style scoped>

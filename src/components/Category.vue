@@ -17,15 +17,15 @@ defineProps({
 
 <style scoped>
 .category {
-  padding: 16px;
+  padding: 12px;
   border-radius: 12px;
   color: #253D4E;
   text-align: center;
-  width: 150px;
+  width: 100px;
 }
 .category img {
   width: 100%;
-  height: 90px;
+  height: 70px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 0px;
