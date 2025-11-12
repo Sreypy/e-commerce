@@ -1,20 +1,19 @@
 <template>
   <button class="btn" 
-    :style="{ backgroundColor: color }  
-    "@click="hendleClick">
-    {{ text }}
+    :style="{ backgroundColor: props.color }"
+    @click="handleClick">
+    {{ props.text }}
   </button>
 </template>
 
 <script setup>
-const props=defineProps({
-  text: String,
-  color: String
-});
-
+const props = defineProps({
+  text: { type: String, default: 'Shop Now' },
+  color: { type: String, default: '#3b82f6' }
+})
 const emit = defineEmits(['click']);
 
-function hendleClick() {
+function handleClick() {
   emit('click');
 }
 </script>
@@ -23,7 +22,7 @@ function hendleClick() {
 .btn {
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 15px 35px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;

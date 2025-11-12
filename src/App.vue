@@ -1,15 +1,13 @@
-
 <template>
   <div id="app">
-
     <!-- Category Section -->
     <section class="categories">
       <Category
         v-for="(cat, index) in categories"
         :key="index"
-        :title="cat.title"
-        :subtitle="cat.subtitle"
-        :image="cat.image"
+        :title="cat.name"
+        :subtitle="`${cat.productCount} items`"
+        :image="getImageUrl(cat.image)"
         :color="cat.color"
       />
     </section>
@@ -20,8 +18,8 @@
         v-for="(promo, index) in promotions"
         :key="index"
         :title="promo.title"
-        :image="promo.image"
-        :bgColor="promo.bgColor"
+        :image="getImageUrl(promo.image)"
+        :bgColor="promo.color"
         :buttonText="promo.buttonText"
         :buttonColor="promo.buttonColor"
       />
@@ -29,47 +27,72 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Category from './components/Category.vue'
 import Promotion from './components/Promotion.vue'
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
 
-// ✅ Local variables (arrays) that represent components
-const categories = [
-  { title: "Cake & Milk", subtitle: "14 items", image: "/images/cake&milk.png", color: "#F2FCE4" },
-  { title: "Peach", subtitle: "12 items", image: "/images/peach.png", color: "#FFFCEB" },
-  { title: "Organic Kiwi", subtitle: "21 items", image: "/images/oganicKiwi.png", color: "#ECFFEC" },
-  { title: "Red Apple", subtitle: "68 items", image: "/images/redApple.png", color: "#FEEFEA" },
-  { title: "Snack", subtitle: "34 items", image: "/images/snack.png", color: "#FFF3EB" },
-  { title: "Black Plum", subtitle: "25 items", image: "/images/blackPlum.png", color: "#FFF3FF" },
-  { title: "Vegetables", subtitle: "65 items", image: "/images/vegetable.png", color: "#F2FCE4" },
-  { title: "Headphone", subtitle: "33 items", image: "/images/headphone.png", color: "#FFFCEB" },
-  { title: "Cake & Milk", subtitle: "54 items", image: "/images/Cake_milk.png", color: "#F2FCE4" },
-  { title: "Orange", subtitle: "63 items", image: "/images/orange.png", color: "#FFF3FF" }
-]
+// Define types
+interface Category {
+  id?: number
+  name: string
+  url: string
+  productCount: number
+  color: string
+  image: string
+}
 
-const promotions = [
-  { 
-    title: "Everyday Fresh Clean with Our Products", 
-    image: "/images/promotion1.png", 
-    bgColor: "#F0E8D5", 
-    buttonText: "Shop Now", 
-    buttonColor: "#3BB77E" 
-  },
-  { 
-    title: "Make your Breakfast Healthy and Easy", 
-    image: "/images/promotion2.png", 
-    bgColor: "#F3E8E8", 
-    buttonText: "Shop Now", 
-    buttonColor: "#3BB77E" 
-  },
-  { 
-    title: "The best Organic Products Online", 
-    image: "/images/promotion3.png", 
-    bgColor: "#E7EAF3", 
-    buttonText: "Shop now", 
-    buttonColor: "#FDC040" 
+interface Promotion {
+  id: number
+  title: string
+  color: string
+  image: string
+  url: string
+  buttonText: string
+  buttonColor: string
+}
+
+// Reactive variables
+const categories = ref<Category[]>([])
+const promotions = ref<Promotion[]>([])
+
+const API_BASE_URL = 'http://localhost:3000'
+
+const getImageUrl = (imagePath: string | undefined) => {
+  if (!imagePath) {
+    return 'https://via.placeholder.com/300x200?text=No+Image'
   }
-]
+  if (imagePath.startsWith('http')) {
+    return imagePath
+  }
+  return `${API_BASE_URL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`
+}
+
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get<Category[]>('http://localhost:3000/api/categories')
+    console.log('Categories API Response:', response.data)
+    categories.value = response.data
+  } catch (error) {
+    console.error('Error fetching products:', error)
+  }
+}
+
+const fetchPromotions = async () => {
+  try {
+    const response = await axios.get<Promotion[]>('http://localhost:3000/api/promotions')
+    console.log('Promotions API Response:', response.data)
+    promotions.value = response.data
+  } catch (error) {
+    console.error('Error fetching promotions:', error)
+  }
+}
+
+onMounted(() => {
+  fetchProducts()
+  fetchPromotions()
+})
 </script>
 
 <style scoped>

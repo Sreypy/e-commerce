@@ -7,9 +7,8 @@
       <ButtonComponent 
         :text="buttonText" 
         :color="buttonColor" 
-        @click="showMwssage"
-        
-        />
+        @click="showMessage"
+      />
       
     </div>
   </div>
@@ -18,7 +17,7 @@
 <script setup>
 import ButtonComponent from './ButtonComponent.vue'
 
-const props=defineProps({
+const props = defineProps({
   title: String,
   description: String,
   image: String,
@@ -27,8 +26,8 @@ const props=defineProps({
   buttonColor: String
 });
 
-function showMwssage() {
-  alert("Let's shop: "+props.title);
+function showMessage() {
+  alert("Let's shop: " + props.title);
 }
 
 </script>
