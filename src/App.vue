@@ -3,7 +3,7 @@
     <!-- Category Section -->
     <section class="categories">
       <Category
-        v-for="(cat, index) in categories"
+        v-for="(cat, index) in productStore.categories"
         :key="index"
         :title="cat.name"
         :subtitle="`${cat.productCount} items`"
@@ -15,7 +15,7 @@
     <!-- Promotion Section -->
     <section class="promotions">
       <Promotion
-        v-for="(promo, index) in promotions"
+        v-for="(promo, index) in productStore.promotions"
         :key="index"
         :title="promo.title"
         :image="getImageUrl(promo.image)"
@@ -24,38 +24,49 @@
         :buttonColor="promo.buttonColor"
       />
     </section>
+
+    <section class="groups">
+      <div
+        class="group-card"
+        v-for="grp in productStore.groups"
+        :key="grp.id"
+      >
+        <h3>{{ grp.name }}</h3>
+      </div>
+    </section>
+
+    <section class="products">
+      <div
+        class="product-card"
+        v-for="prod in productStore.products"
+        :key="prod.id"
+      >
+        <img :src="prod.image" alt="" />
+        <h4>{{ prod.name }}</h4>
+        <p>Price: {{ prod.price }} USD</p>
+        <p>Rating: {{ prod.rating }}</p>
+        <p>Size: {{ prod.size }}</p>
+        <p>Sold: {{ prod.countSold }}</p>
+        
+      </div>
+    </section>
+
+<ProductCard 
+  v-for="p in products" 
+  :key="p.id" 
+  :product="p" 
+/>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import Category from './components/Category.vue'
 import Promotion from './components/Promotion.vue'
-import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useProductStore } from "@/stores/product"
 
-// Define types
-interface Category {
-  id?: number
-  name: string
-  url: string
-  productCount: number
-  color: string
-  image: string
-}
-
-interface Promotion {
-  id: number
-  title: string
-  color: string
-  image: string
-  url: string
-  buttonText: string
-  buttonColor: string
-}
-
-// Reactive variables
-const categories = ref<Category[]>([])
-const promotions = ref<Promotion[]>([])
+const productStore = useProductStore()
 
 const API_BASE_URL = 'http://localhost:3000'
 
@@ -69,29 +80,8 @@ const getImageUrl = (imagePath: string | undefined) => {
   return `${API_BASE_URL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`
 }
 
-const fetchProducts = async () => {
-  try {
-    const response = await axios.get<Category[]>('http://localhost:3000/api/categories')
-    console.log('Categories API Response:', response.data)
-    categories.value = response.data
-  } catch (error) {
-    console.error('Error fetching products:', error)
-  }
-}
-
-const fetchPromotions = async () => {
-  try {
-    const response = await axios.get<Promotion[]>('http://localhost:3000/api/promotions')
-    console.log('Promotions API Response:', response.data)
-    promotions.value = response.data
-  } catch (error) {
-    console.error('Error fetching promotions:', error)
-  }
-}
-
-onMounted(() => {
-  fetchProducts()
-  fetchPromotions()
+onMounted(async () => {
+  await productStore.loadAllData()
 })
 </script>
 
@@ -106,15 +96,10 @@ onMounted(() => {
   gap: 15px;
   margin-bottom: 40px;
   justify-content: center;
-  height: auto;
 }
 .promotions {
   display: flex;
   flex-direction: row;
   gap: 5px;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
 }
 </style>
