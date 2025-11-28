@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <!-- Category Section -->
+
+    <!-- 1. HEADER: Featured Categories -->
+    <Header title="Featured Categories"/>
+
+    <!-- 2. CATEGORY SECTION -->
     <section class="categories">
       <Category
         v-for="(cat, index) in productStore.categories"
@@ -12,7 +16,7 @@
       />
     </section>
 
-    <!-- Promotion Section -->
+    <!-- 3. PROMOTION SECTION -->
     <section class="promotions">
       <Promotion
         v-for="(promo, index) in productStore.promotions"
@@ -25,6 +29,10 @@
       />
     </section>
 
+    <!-- 4. HEADER: Popular Products -->
+    <Header title="Popular Products"/>
+
+    <!-- 5. GROUPS SECTION -->
     <section class="groups">
       <div
         class="group-card"
@@ -35,34 +43,24 @@
       </div>
     </section>
 
+    <!-- 6. PRODUCT GRID (uses ProductCard.vue) -->
     <section class="products">
-      <div
-        class="product-card"
+      <ProductCard
         v-for="prod in productStore.products"
         :key="prod.id"
-      >
-        <img :src="prod.image" alt="" />
-        <h4>{{ prod.name }}</h4>
-        <p>Price: {{ prod.price }} USD</p>
-        <p>Rating: {{ prod.rating }}</p>
-        <p>Size: {{ prod.size }}</p>
-        <p>Sold: {{ prod.countSold }}</p>
-        
-      </div>
+        :product="prod"
+      />
     </section>
-
-<ProductCard 
-  v-for="p in products" 
-  :key="p.id" 
-  :product="p" 
-/>
 
   </div>
 </template>
 
 <script setup lang="ts">
+import Header from './components/Header.vue'
 import Category from './components/Category.vue'
 import Promotion from './components/Promotion.vue'
+import ProductCard from './components/Product.vue'
+
 import { onMounted } from 'vue'
 import { useProductStore } from "@/stores/product"
 
@@ -90,6 +88,7 @@ onMounted(async () => {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   padding: 20px;
 }
+
 .categories {
   display: flex;
   flex-wrap: wrap;
@@ -97,9 +96,24 @@ onMounted(async () => {
   margin-bottom: 40px;
   justify-content: center;
 }
+
 .promotions {
   display: flex;
   flex-direction: row;
   gap: 5px;
+  margin-bottom: 40px;
+}
+
+.groups {
+  display: flex;
+  gap: 15px;
+  margin: 0px 5px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 25px;
+  margin-top: 10px;
 }
 </style>

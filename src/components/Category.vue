@@ -17,7 +17,7 @@ defineProps({
 
 <style scoped>
 .category {
-  padding: 12px;
+  padding: 16px;
   border-radius: 12px;
   color: #253D4E;
   text-align: center;

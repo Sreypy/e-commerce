@@ -12,19 +12,19 @@ export const useProductStore = defineStore("product", {
   getters: {
     // 1. List all categories by group name
     getCategoriesByGroup: (state) => {
-      return (groupName) =>
+      return (groupName: any) =>
         state.categories.filter((category) => category.group === groupName);
     },
 
     // 2. List all products by group name
     getProductsByGroup: (state) => {
-      return (groupName) =>
+      return (groupName: any) =>
         state.products.filter((product) => product.group === groupName);
     },
 
     // 3. List all products by categoryId
     getProductsByCategory: (state) => {
-      return (categoryId) =>
+      return (categoryId: any) =>
         state.products.filter((product) => product.categoryId === categoryId);
     },
 
