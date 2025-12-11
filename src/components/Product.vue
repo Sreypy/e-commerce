@@ -1,65 +1,71 @@
 <template>
-  <div class="product-card">
+  <RouterLink :to="`/product/${product.id}`" class="product-link">
+    <div class="product-card">
 
-    <!-- BADGE (Promotion / Hot / Sale) -->
-    <div
-      v-if="badgeText"
-      class="badge"
-      :class="badgeColor"
-    >
-      {{ badgeText }}
-    </div>
-
-    <!-- IMAGE -->
-    <img :src="image" class="product-img" />
-
-    <div class="info">
-      <p class="brand">Hodo Foods</p>
-      <h3 class="title">{{ product.name }}</h3>
-
-      <!-- RATING -->
-      <div class="rating">
-        <i 
-          v-for="n in 5" 
-          :key="n"
-          class="fa-star"
-          :class="n <= product.rating ? 'fas filled' : 'far empty'"
-        ></i>
-        <span class="rating-number">{{ product.rating }}</span>
+      <!-- BADGE -->
+      <div
+        v-if="badgeText"
+        class="badge"
+        :class="badgeColor"
+      >
+        {{ badgeText }}
       </div>
 
-      <p class="size">{{ product.size }}</p>
+      <!-- IMAGE -->
+      <img :src="image" class="product-img" />
 
-      <!-- PRICES -->
-      <div class="price-row">
-        <span class="new-price">${{ product.price }}</span>
+      <div class="info">
+        <p class="brand">Hodo Foods</p>
+        <h3 class="title">{{ product.name }}</h3>
 
-        <!-- Old price (API or calculated) -->
-        <span v-if="finalOldPrice" class="old-price">
-          ${{ finalOldPrice }}
-        </span>
-        
-        <button 
-          class="btn-add" 
-          v-if="qty === 0" 
-          @click="increase"
+        <!-- RATING -->
+        <div class="rating">
+          <i 
+            v-for="n in 5" 
+            :key="n"
+            class="fa-star"
+            :class="n <= product.rating ? 'fas filled' : 'far empty'"
+          ></i>
+          <span class="rating-number">{{ product.rating }}</span>
+        </div>
+
+        <p class="size">{{ product.size }}</p>
+
+        <!-- PRICES -->
+        <div class="price-row">
+          <span class="new-price">${{ product.price }}</span>
+
+          <span v-if="finalOldPrice" class="old-price">
+            ${{ finalOldPrice }}
+          </span>
+
+          <button 
+            class="btn-add" 
+            v-if="qty === 0" 
+            @click.stop="increase"
           >
-          Add +
-        </button>
+            Add +
+          </button>
 
-        <button class="btn-add" v-else>
-          <div class="qty-inline">
-            <span class="qty-icon" @click.stop="decrease">▾</span>
-            <span class="qty-value">{{ qty }}</span>
-            <span class="qty-icon" @click.stop="increase">▴</span>
-          </div>
-        </button>
+          <button 
+            class="btn-add" 
+            v-else 
+            @click.stop
+          >
+            <div class="qty-inline">
+              <span class="qty-icon" @click.stop="decrease">▾</span>
+              <span class="qty-value">{{ qty }}</span>
+              <span class="qty-icon" @click.stop="increase">▴</span>
+            </div>
+          </button>
 
+        </div>
       </div>
 
     </div>
-  </div>
+  </RouterLink>
 </template>
+
 
 <script setup>
 import { ref, computed } from "vue";
@@ -269,6 +275,10 @@ const decrease = () => { if (qty.value > 0) qty.value--; };
   font-size: 14px;
   color: #9ca3af;
   margin-right: 4rem;
+}
+.product-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 </style>

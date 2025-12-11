@@ -1,4 +1,5 @@
 <template>
+   <RouterLink :to="`/product/${title}`" class="product-link">
   <div class="promo" :style="{ backgroundColor: bgColor }">
     <img :src="image" alt="Promotion images" />
     <div class="content">
@@ -12,6 +13,7 @@
       
     </div>
   </div>
+  </RouterLink>
 </template>
 
 <script setup>
@@ -33,6 +35,10 @@ function showMessage() {
 </script>
 
 <style scoped>
+.product-link {
+  text-decoration: none;
+  color: inherit;
+}
 .promo {
   display: flex;
   align-items: center;
@@ -41,7 +47,7 @@ function showMessage() {
   border-radius: 16px;
   color: #253D4E;
   gap: 20px;
-  width: 750px;
+  width: 440px;
   height: 250px;
 }
 .promo img {

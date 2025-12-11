@@ -1,15 +1,19 @@
 <template>
-  <div id="app">
-    <RouterView />
+  <div class="home-page">
 
-    <!-- 1. HEADER: Featured Categories -->
+    <!-- 🔹 NAVIGATION -->
+    <SearchBox />
+    <MenuItem />
+
+    <!-- 🔹 SHOWCASE BANNER -->
+    <ShowCase />
+
+    <!-- 🔹 FEATURED CATEGORIES -->
     <Header title="Featured Categories" />
-
-    <!-- 2. CATEGORY SECTION -->
     <section class="categories">
       <Category
-        v-for="(cat, index) in productStore.categories"
-        :key="index"
+        v-for="cat in store.categories"
+        :key="cat.id"
         :title="cat.name"
         :subtitle="`${cat.productCount} items`"
         :image="getImageUrl(cat.image)"
@@ -17,11 +21,11 @@
       />
     </section>
 
-    <!-- 3. PROMOTION SECTION -->
+    <!-- 🔹 PROMOTIONS -->
     <section class="promotions">
       <Promotion
-        v-for="(promo, index) in productStore.promotions"
-        :key="index"
+        v-for="promo in store.promotions"
+        :key="promo.id"
         :title="promo.title"
         :image="getImageUrl(promo.image)"
         :bgColor="promo.color"
@@ -30,24 +34,11 @@
       />
     </section>
 
-    <!-- 4. HEADER: Popular Products -->
+    <!-- 🔹 POPULAR PRODUCTS -->
     <Header title="Popular Products" />
-
-    <!-- 5. GROUPS SECTION -->
-    <section class="groups">
-      <div
-        class="group-card"
-        v-for="grp in productStore.groups"
-        :key="grp.id"
-      >
-        <h3>{{ grp.name }}</h3>
-      </div>
-    </section>
-
-    <!-- 6. PRODUCT GRID -->
     <section class="products">
       <ProductCard
-        v-for="prod in productStore.products"
+        v-for="prod in store.products"
         :key="prod.id"
         :product="prod"
       />
@@ -56,42 +47,38 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import Header from '@/components/Header.vue'
-import Category from '@/components/Category.vue'
-import Promotion from '@/components/Promotion.vue'
-import ProductCard from '@/components/Product.vue'
+<script setup>
+import { onMounted } from "vue";
+import { useProductStore } from "@/stores/product";
 
-import { onMounted } from 'vue'
-import { useProductStore } from "@/stores/product"
+// import SearchBox from "@/components/SearchBox.vue";
+// import MenuItem from "@/components/MenuItem.vue";
+import ShowCase from "@/components/ShowCase.vue";
 
-// Component name (optional)
-defineOptions({
-  name: "HomeView"
-})
+import Header from "@/components/Header.vue";
+import Category from "@/components/Category.vue";
+import Promotion from "@/components/Promotion.vue";
+import ProductCard from "@/components/Product.vue";
 
-const productStore = useProductStore()
+const store = useProductStore();
 
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL = "http://localhost:3000";
 
-const getImageUrl = (imagePath: string | undefined) => {
-  if (!imagePath) {
-    return 'https://via.placeholder.com/300x200?text=No+Image'
-  }
-  if (imagePath.startsWith('http')) {
-    return imagePath
-  }
-  return `${API_BASE_URL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`
+function getImageUrl(path) {
+  if (!path) return "https://via.placeholder.com/300x200?text=No+Image";
+
+  if (path.startsWith("http")) return path;
+
+  return `${API_BASE_URL}/${path.replace(/\\/g, "/")}`;
 }
 
-onMounted(async () => {
-  await productStore.loadAllData()
-})
+onMounted(() => {
+  store.loadAllData();
+});
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+.home-page {
   padding: 20px;
 }
 
@@ -100,26 +87,17 @@ onMounted(async () => {
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 40px;
-  justify-content: center;
 }
 
 .promotions {
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  margin-bottom: 40px;
-}
-
-.groups {
-  display: flex;
-  gap: 15px;
-  margin: 0px 5px;
+  gap: 10px;
+  margin: 40px 0;
 }
 
 .products {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 25px;
-  margin-top: 10px;
 }
 </style>

@@ -1,12 +1,7 @@
-<!-- App.vue -->
 <template>
-  <div id="app">
-    <RouterView />
-  </div>
+  <MainLayout />
 </template>
 
-<script lang="ts">
-export default {
-  name: "App",
-};
+<script setup>
+import MainLayout from "@/layout/MainLayout.vue";
 </script>
