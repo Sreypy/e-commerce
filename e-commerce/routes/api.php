@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AudienceController;
+use App\Http\Controllers\CommentController;
+
 
 // ------------------
 // LOGIN (Passport)
@@ -81,3 +86,9 @@ Route::middleware('auth:api')->group(function () {
         });
 
 });
+
+Route::get('/create-authors', [AuthorController::class, 'createAuthors']);
+Route::get('/create-articles', [ArticleController::class, 'createArticles']);
+Route::get('/create-audiences', [AudienceController::class, 'createAudiences']);
+Route::get('/subscribe', [AudienceController::class, 'subscribeArticles']);
+Route::get('/create-comments', [CommentController::class, 'createComments']);

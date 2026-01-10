@@ -68,4 +68,22 @@ class User extends Authenticatable
             })
             ->exists();
     }
+
+    // 1. User → Author (1–1)
+    public function author()
+    {
+        return $this->hasOne(Author::class);
+    }
+
+    // 2. User → Audience (1–1)
+    public function audience()
+    {
+        return $this->hasOne(Audience::class);
+    }
+
+    // 8. User → Comments (1–Many)
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
